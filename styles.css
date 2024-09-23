@@ -1,0 +1,119 @@
+/* chess.com styles */
+#ArslanovChessComUI {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 600;
+  font-size: 20px;
+  color: #ffffff;
+  margin: 10px 15px 0;
+}
+
+#ArslanovChessComUI > .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+#ArslanovChessComUI > .title > .svg-container {
+  margin-left: 10px;
+  filter: brightness(1.5);
+}
+
+#ArslanovChessComUI > .buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 270px;
+}
+
+#ArslanovChessComUI > .buttons > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #313131;
+  color: #c1c1c1;
+  border: none;
+  height: 35px;
+  font-size: 17px;
+  width: calc((100% - 10px) / 2);
+  border-radius: 5px;
+  line-height: 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#ArslanovChessComUI > .buttons > button:first-child {
+  background: #c1c1c1;
+  color: #313131;
+}
+
+.modal-game-over-buttons-component > #ArslanovChessComUI {
+  margin: 0;
+}
+
+.modal-game-over-buttons-component {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* lichess.org styles */
+
+#ArslanovLichessUI {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #c1c1c1;
+  background: #262421;
+  border-radius: 6px;
+  padding: 20px 0;
+}
+
+#ArslanovLichessUI > .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  white-space: nowrap;
+}
+
+#ArslanovLichessUI > .title > .svg-container {
+  margin-left: 10px;
+}
+
+#ArslanovLichessUI > .buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 274px;
+}
+
+#ArslanovLichessUI > .buttons > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #313131;
+  color: #c1c1c1;
+  border: none;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  width: calc((100% - 10px) / 2);
+  border-radius: 5px;
+  line-height: 0;
+  cursor: pointer;
+}
+
+#ArslanovLichessUI > .buttons > button:first-child {
+  background: #c1c1c1;
+  color: #313131;
+}
+
+.analyse__round-training > .analyse__puzzle {
+  display: none;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="popup.js"></script>
+    <style>
+        body {
+            background: #313131;
+            font-size: 24px;
+            font-family: sans-serif;
+            color: #c1c1c1;
+        }
+
+        .range {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            height: 100px;
+            width: 300px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            -moz-apperance: none;
+            appearance: none;
+            width: 100%;
+            height: 2px;
+            outline: none;
+            background-color: #c1c1c1;
+            border-radius: calc(var(--ratio) * 0.3);
+            margin-left: 0.1em;
+            margin-bottom: 1.4em;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            background-color: #313131;
+            box-shadow: 0 0 0 2px #c1c1c1;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Стиль для ползунка в Firefox */
+        input[type="range"]::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background-color: #313131;
+            box-shadow: 0 0 0 2px #c1c1c1;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="range">
+        <label for="depth">Глубина анализа: <span class="depth-value">8</span></label>
+        <input type="range" min="8" max="24" value="8" id="depth">
+    </div>
+</body>
+
+</html>
