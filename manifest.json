@@ -17,6 +17,10 @@
   "content_scripts": [
     {
       "matches": [
+        "https://www.c4355.com/game/computer/*",
+        "https://www.c4355.com/game/live/*",
+        "https://www.c4355.com/play/computer*",
+        "https://www.c4355.com/play/live*",
         "https://www.chess.com/game/computer/*",
         "https://www.chess.com/game/live/*",
         "https://www.chess.com/play/computer*",
