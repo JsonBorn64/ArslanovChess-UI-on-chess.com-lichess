@@ -116,7 +116,10 @@ async function openPgnTab() {
         document.querySelector('div.alt-share-menu-tab.alt-share-menu-tab-image-component')
 
     if (pgnDiv) {
-        return Promise.resolve()
+        return new Promise((resolve, reject) => {
+            pgnDiv.click()
+            setTimeout(resolve, 500)
+        })
     }
     let pgnTab = document.querySelector("#live_ShareMenuGlobalDialogDownloadButton") ||
         document.querySelector(".icon-font-chess.download.icon-font-primary") ||
