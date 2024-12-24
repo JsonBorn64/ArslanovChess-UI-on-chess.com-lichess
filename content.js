@@ -28,7 +28,7 @@ async function goToArslanovChess(site, color) {
         if (site == "chess.com") pgn = await getCurrentPgn_chessCom()
         else pgn = getCurrentPgn_lichess()
         pgn = encodeURIComponent(cleanPgn(pgn))
-        window.open(`https://arslanovchess.com/game-analysis?autostart=true&color=${color}&depth=${res.depth || 8}&pgn=${pgn}`)
+        window.open(`https://arslanovchess.com/games-analysis?autostart=true&color=${color}&pgn=${pgn}`)
     })
 }
 
