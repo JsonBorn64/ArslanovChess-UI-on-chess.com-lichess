@@ -12,6 +12,11 @@ if (window.location.href.includes("chess.com") || window.location.href.includes(
         if (targetElement) targetElement.appendChild(arslanovUI("chess.com"))
     })
 
+    onElementAppear('.tab-review-action-buttons', () => {
+        const targetElement = document.querySelector('.tab-review-action-buttons')
+        if (targetElement) targetElement.appendChild(arslanovUI("chess.com"))
+    })
+
 }
 
 if (window.location.href.includes("lichess.org")) {
@@ -19,17 +24,18 @@ if (window.location.href.includes("lichess.org")) {
         const targetElement = document.querySelector('.analyse__round-training')
         if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
     })
+    onElementAppear('.round__side', () => {
+        const targetElement = document.querySelector('.round__side')
+        if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
+    })
 }
 
 async function goToArslanovChess(site, color) {
-    const storage = (typeof browser !== 'undefined') ? browser.storage : chrome.storage
-    storage.local.get(['depth'], async (res) => {
-        let pgn
-        if (site == "chess.com") pgn = await getCurrentPgn_chessCom()
-        else pgn = getCurrentPgn_lichess()
-        pgn = encodeURIComponent(cleanPgn(pgn))
-        window.open(`https://arslanovchess.com/games-analysis?autostart=true&color=${color}&pgn=${pgn}`)
-    })
+    let pgn
+    if (site == "chess.com") pgn = await getCurrentPgn_chessCom()
+    else pgn = await getCurrentPgn_lichess()
+    pgn = encodeURIComponent(cleanPgn(pgn))
+    window.open(`https://arslanovchess.com/games-analysis?autostart=true&color=${color}&pgn=${pgn}#title`)
 }
 
 function arslanovUI(site) {
@@ -83,8 +89,61 @@ function onElementAppear(selector, callback) {
     observer.observe(targetNode, config)
 }
 
+function chessComJsonToPgn(json) {
+    const initialFen = json.game.initialSetup || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    const moveList = json.game.moveList
+    var T = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?{~}(^)[_]@#$,./&-*++=";
+    function decodeMoves(e) {
+        var c, a, g = e.length, f = []
+        for (c = 0; c < g; c += 2) {
+            var d = {}, b = T.indexOf(e[c])
+            63 < (a = T.indexOf(e[c + 1])) && (d.promotion = "qnrbkp"[Math.floor((a - 64) / 3)], a = b + (16 > b ? -8 : 8) + (a - 1) % 3 - 1)
+            75 < b ? d.drop = "qnrbkp"[b - 79] : d.from = T[b % 8] + (Math.floor(b / 8) + 1)
+            d.to = T[a % 8] + (Math.floor(a / 8) + 1)
+            f.push(d)
+        }
+        return f
+    }
+    const chess = new Chess(initialFen)
+
+    chess.header("White", json.game.pgnHeaders.White)
+    chess.header("Black", json.game.pgnHeaders.Black)
+    chess.header("WhiteElo", json.game.pgnHeaders.WhiteElo.toString())
+    chess.header("BlackElo", json.game.pgnHeaders.BlackElo.toString())
+
+    decodeMoves(moveList).forEach(move => {
+        // fix castling
+        if (chess.get(move.from).type == 'k' && (move.from == 'e1' || move.from == 'e8')) {
+            if (move.to == 'h1') move.to = 'g1'
+            if (move.to == 'a1') move.to = 'c1'
+            if (move.to == 'h8') move.to = 'g8'
+            if (move.to == 'a8') move.to = 'c8'
+        }
+        chess.move(move)
+    })
+    console.log(chess.pgn())
+    return chess.pgn()
+}
+
 async function getCurrentPgn_chessCom() {
     debuglog("getCurrentPgn_chessCom")
+    // try to get pgn by id
+    try {
+        const urlParts = window.location.href.split("/")
+        const gameId = parseInt(urlParts[urlParts.length - 1])
+        const gameType = urlParts[urlParts.length - 2]
+
+        if (gameType == "computer") {
+            const json = await fetch(`https://www.chess.com/computer/callback/game/${gameId}`).then(res => res.json())
+            return Promise.resolve(chessComJsonToPgn(json))
+        } else {
+            const json = await fetch(`https://www.chess.com/callback/${gameType}/game/${gameId}`).then(res => res.json())
+            return Promise.resolve(chessComJsonToPgn(json))
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
 
     let pgn = await openShareDialog()
         .then(openPgnTab)
@@ -105,9 +164,22 @@ async function getCurrentPgn_chessCom() {
 }
 
 function getCurrentPgn_lichess() {
-    debuglog("getCurrentPgn_chessCom")
-    const $pgn = document.querySelector('.pgn')
-    if ($pgn) return $pgn.textContent
+    debuglog("getCurrentPgn_lichess")
+    // get game id
+    const urlParts = window.location.href.split("/")
+    const index = urlParts.indexOf("lichess.org") + 1
+    const gameId = urlParts[index].slice(0, 8)
+    // get game pgn
+    return new Promise((resolve, reject) => {
+        fetch(`https://lichess.org/game/export/${gameId}?evals=false&clocks=false&opening=false`)
+            .then(response => response.text())
+            .then(data => {
+                resolve(data)
+            })
+            .catch((error) => {
+                reject(error)
+            })
+    })
 }
 
 async function openPgnTab() {
@@ -234,10 +306,10 @@ function cleanPgn(pgn) {
 
     const tags = pgn.match(header_regex) || []
     const filteredTags = tags.filter((tag) => {
-        const legalTagNames = ["Event ", "White ", "Black ", "FEN "]
+        const legalTagNames = ["Event ", "White ", "Black ", "WhiteElo ", "BlackElo ", "FEN "]
         return legalTagNames.some((tagName) => tag.includes(tagName))
     })
-    
+
     const moves = pgn
         .replace(header_regex, '')
         .replace(comments_regex, '')
