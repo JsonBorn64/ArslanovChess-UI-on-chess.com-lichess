@@ -20,14 +20,17 @@ if (window.location.href.includes("chess.com") || window.location.href.includes(
 }
 
 if (window.location.href.includes("lichess.org")) {
-    onElementAppear('.analyse__round-training', () => {
-        const targetElement = document.querySelector('.analyse__round-training')
-        if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
-    })
-    onElementAppear('.round__side', () => {
-        const targetElement = document.querySelector('.round__side')
-        if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
-    })
+    const url = window.location.href
+    if (!url.includes("/tv") && !url.includes("/study")) {
+        onElementAppear('.status', () => {
+            const targetElement = document.querySelector('.analyse__round-training')
+            if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
+        })
+        onElementAppear('.status', () => {
+            const targetElement = document.querySelector('.round__side')
+            if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
+        })
+    }
 }
 
 async function goToArslanovChess(site, color) {
@@ -134,10 +137,10 @@ async function getCurrentPgn_chessCom() {
         const gameType = urlParts[urlParts.length - 2]
 
         if (gameType == "computer") {
-            const json = await fetch(`https://www.chess.com/computer/callback/game/${gameId}`).then(res => res.json())
+            const json = await fetch(`https://${urlParts[2]}/computer/callback/game/${gameId}`).then(res => res.json())
             return Promise.resolve(chessComJsonToPgn(json))
         } else {
-            const json = await fetch(`https://www.chess.com/callback/${gameType}/game/${gameId}`).then(res => res.json())
+            const json = await fetch(`https://${urlParts[2]}/callback/${gameType}/game/${gameId}`).then(res => res.json())
             return Promise.resolve(chessComJsonToPgn(json))
         }
 
