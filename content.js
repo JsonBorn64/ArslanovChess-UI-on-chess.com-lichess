@@ -23,12 +23,16 @@ if (window.location.href.includes("lichess.org")) {
     const url = window.location.href
     if (!url.includes("/tv") && !url.includes("/study")) {
         onElementAppear('.status', () => {
-            const targetElement = document.querySelector('.analyse__round-training')
-            if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
+            setTimeout(() => {
+                const targetElement = document.querySelector('.analyse__round-training')
+                if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
+            }, 100)
         })
         onElementAppear('.status', () => {
-            const targetElement = document.querySelector('.round__side')
-            if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
+            setTimeout(() => {
+                const targetElement = document.querySelector('.round__side')
+                if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
+            }, 100)
         })
     }
 }
