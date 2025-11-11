@@ -1,4 +1,5 @@
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="21" viewBox="0 0 17 21" fill="none"><path d="M16.2917 0.375H13.8125C13.6246 0.375 13.4445 0.447433 13.3116 0.576364C13.1788 0.705295 13.1042 0.880164 13.1042 1.0625V3.125H10.9792V1.0625C10.9792 0.880164 10.9045 0.705295 10.7717 0.576364C10.6389 0.447433 10.4587 0.375 10.2708 0.375H6.72917C6.5413 0.375 6.36114 0.447433 6.2283 0.576364C6.09546 0.705295 6.02083 0.880164 6.02083 1.0625V3.125H3.90026V1.0625C3.90026 0.880164 3.82563 0.705295 3.69279 0.576364C3.55996 0.447433 3.37979 0.375 3.19193 0.375H0.708333C0.520472 0.375 0.340304 0.447433 0.207466 0.576364C0.0746278 0.705295 0 0.880164 0 1.0625L0 8.625L2.83333 10C2.83333 12.0767 2.76516 14.082 2.24852 16.875H14.7515C14.2348 14.082 14.1667 12.0505 14.1667 10L17 8.625V1.0625C17 0.880164 16.9254 0.705295 16.7925 0.576364C16.6597 0.447433 16.4795 0.375 16.2917 0.375ZM9.91667 12.75H7.08333V10C7.08333 9.63533 7.23259 9.28559 7.49827 9.02773C7.76394 8.76987 8.12428 8.625 8.5 8.625C8.87572 8.625 9.23606 8.76987 9.50173 9.02773C9.76741 9.28559 9.91667 9.63533 9.91667 10V12.75ZM16.2917 18.25H0.708333C0.520472 18.25 0.340304 18.3224 0.207466 18.4514C0.0746278 18.5803 0 18.7552 0 18.9375L0 20.3125C0 20.4948 0.0746278 20.6697 0.207466 20.7986C0.340304 20.9276 0.520472 21 0.708333 21H16.2917C16.4795 21 16.6597 20.9276 16.7925 20.7986C16.9254 20.6697 17 20.4948 17 20.3125V18.9375C17 18.7552 16.9254 18.5803 16.7925 18.4514C16.6597 18.3224 16.4795 18.25 16.2917 18.25Z" fill="#C1C1C1"/></svg>`
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" viewBox="0 0 47 64" fill="none">
+<g clip-path="url(#clip0_357_20)"><path d="M47 19.5H0V3C0 1.61929 1.11929 0.5 2.5 0.5H10.5C11.8807 0.5 13 1.61929 13 3V6C13 7.38071 14.1193 8.5 15.5 8.5C16.8807 8.5 18 7.38071 18 6V3C18 1.61929 19.1193 0.5 20.5 0.5H26.5C27.8807 0.5 29 1.61929 29 3V6C29 7.38071 30.1193 8.5 31.5 8.5C32.8807 8.5 34 7.38071 34 6V3C34 1.61929 35.1193 0.5 36.5 0.5H44.5C45.8807 0.5 47 1.61929 47 3V19.5Z" fill="white"/><path d="M2.5 63.5C1.11929 63.5 0 62.3807 0 61V60.5H47V61C47 62.3807 45.8807 63.5 44.5 63.5H2.5Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M8 24.5H39.5L47 55.5H29.5C28.1193 55.5 27 54.3807 27 53V50C27 48.6193 25.8807 47.5 24.5 47.5H22.5C21.1193 47.5 20 48.6193 20 50V53C20 54.3807 18.8807 55.5 17.5 55.5H0L8 24.5ZM22.5 31.5C21.1193 31.5 20 32.6193 20 34V38C20 39.3807 21.1193 40.5 22.5 40.5H24.5C25.8807 40.5 27 39.3807 27 38V34C27 32.6193 25.8807 31.5 24.5 31.5H22.5Z" fill="white"/></g><defs><clipPath id="clip0_357_20"><rect width="47" height="63" fill="white" transform="translate(0 0.5)"/></clipPath></defs></svg>`
 
 if (window.location.href.includes("chess.com") || window.location.href.includes("c4355.com")) {
 
@@ -22,13 +23,13 @@ if (window.location.href.includes("chess.com") || window.location.href.includes(
 if (window.location.href.includes("lichess.org")) {
     const url = window.location.href
     if (!url.includes("/tv") && !url.includes("/study")) {
-        onElementAppear('.status', () => {
+        onElementAppear('section.status', () => {
             setTimeout(() => {
                 const targetElement = document.querySelector('.analyse__round-training')
                 if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
             }, 100)
         })
-        onElementAppear('.status', () => {
+        onElementAppear('section.status', () => {
             setTimeout(() => {
                 const targetElement = document.querySelector('.round__side')
                 if (targetElement) targetElement.appendChild(arslanovUI("lichess.org"))
@@ -41,8 +42,9 @@ async function goToArslanovChess(site, color) {
     let pgn
     if (site == "chess.com") pgn = await getCurrentPgn_chessCom()
     else pgn = await getCurrentPgn_lichess()
-    pgn = encodeURIComponent(cleanPgn(pgn))
-    window.open(`https://arslanovchess.com/games-analysis?autostart=true&color=${color}&pgn=${pgn}#title`)
+    const encoded = encodeURIComponent(cleanPgn(pgn))
+    window.open(`https://arslanovchess.com/games-analysis?autostart=true&color=${color}&pgn=${encoded}#title`)
+    return pgn
 }
 
 function arslanovUI(site) {
@@ -57,16 +59,18 @@ function arslanovUI(site) {
 
     const buttonW = document.createElement("button")
     buttonW.textContent = "За белых"
-    buttonW.onclick = () => goToArslanovChess(site, "w")
 
     const buttonB = document.createElement("button")
     buttonB.textContent = "За чёрных"
-    buttonB.onclick = () => goToArslanovChess(site, "b")
 
     const buttonContainer = document.createElement("div")
     buttonContainer.classList.add("buttons")
     buttonContainer.appendChild(buttonW)
     buttonContainer.appendChild(buttonB)
+
+    // Use a handler that swaps buttons with a loader while PGN is fetched
+    buttonW.addEventListener('click', () => handleAnalyzeClick(site, 'w', buttonContainer))
+    buttonB.addEventListener('click', () => handleAnalyzeClick(site, 'b', buttonContainer))
 
     const container = document.createElement("div")
     container.id = site == "chess.com" ? "ArslanovChessComUI" : "ArslanovLichessUI"
@@ -137,13 +141,17 @@ async function getCurrentPgn_chessCom() {
     // try to get pgn by id
     try {
         const urlParts = window.location.href.split("/")
-        const gameId = parseInt(urlParts[urlParts.length - 1])
-        const gameType = urlParts[urlParts.length - 2]
 
-        if (gameType == "computer") {
+        // Find gameId and gameType dynamically
+        const gameId = urlParts.find(part => !isNaN(parseInt(part)))
+        const gameTypeIndex = urlParts.indexOf(gameId) - 1
+        let gameType = gameTypeIndex >= 0 ? urlParts[gameTypeIndex] : null
+
+        if (gameType === "computer") {
             const json = await fetch(`https://${urlParts[2]}/computer/callback/game/${gameId}`).then(res => res.json())
             return Promise.resolve(chessComJsonToPgn(json))
-        } else {
+        } else if (gameType) {
+            if (gameType === "game") gameType = "live"
             const json = await fetch(`https://${urlParts[2]}/callback/${gameType}/game/${gameId}`).then(res => res.json())
             return Promise.resolve(chessComJsonToPgn(json))
         }
@@ -331,4 +339,59 @@ function cleanPgn(pgn) {
 function debuglog(message) {
     const logDebugMessages = false
     if (logDebugMessages) console.log(message)
+}
+
+// Loader and error UI helpers
+function createLoader() {
+    const wrapper = document.createElement('div')
+    wrapper.className = 'arslanov-loader'
+    const spinner = document.createElement('div')
+    spinner.className = 'arslanov-spinner'
+    const text = document.createElement('span')
+    text.className = 'arslanov-loader-text'
+    text.textContent = 'Загрузка PGN...'
+    wrapper.appendChild(spinner)
+    wrapper.appendChild(text)
+    return wrapper
+}
+
+function showError(container, message) {
+    container.innerHTML = ''
+    const errorDiv = document.createElement('div')
+    errorDiv.className = 'arslanov-error'
+    errorDiv.innerHTML = message
+    container.appendChild(errorDiv)
+}
+
+function handleAnalyzeClick(site, color, buttonContainer) {
+    if (buttonContainer.dataset.loading === 'true') return
+    const originalButtons = Array.from(buttonContainer.children).map(n => n.cloneNode(true))
+    buttonContainer.dataset.loading = 'true'
+    buttonContainer.innerHTML = ''
+    buttonContainer.appendChild(createLoader())
+
+    goToArslanovChess(site, color)
+        .then(() => {
+            // success: restore original buttons
+            buttonContainer.innerHTML = ''
+            originalButtons.forEach(btn => buttonContainer.appendChild(btn))
+            // re-wire events after clone
+            const [btnW, btnB] = buttonContainer.children
+            if (btnW) btnW.addEventListener('click', () => handleAnalyzeClick(site, 'w', buttonContainer))
+            if (btnB) btnB.addEventListener('click', () => handleAnalyzeClick(site, 'b', buttonContainer))
+        })
+        .catch(err => {
+            console.error('Ошибка получения PGN', err)
+            showError(buttonContainer, 'Ошибка получения PGN. <br> Попробуйте через архив партий.')
+            setTimeout(() => {
+                buttonContainer.innerHTML = ''
+                originalButtons.forEach(btn => buttonContainer.appendChild(btn))
+                const [btnW, btnB] = buttonContainer.children
+                if (btnW) btnW.addEventListener('click', () => handleAnalyzeClick(site, 'w', buttonContainer))
+                if (btnB) btnB.addEventListener('click', () => handleAnalyzeClick(site, 'b', buttonContainer))
+            }, 5000)
+        })
+        .finally(() => {
+            delete buttonContainer.dataset.loading
+        })
 }
