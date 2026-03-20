@@ -3,8 +3,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" view
 
 if (window.location.href.includes("chess.com") || window.location.href.includes("c4355.com")) {
 
-    onElementAppear('.game-over-modal-buttons', () => {
-        const targetElement = document.querySelector('.game-over-modal-buttons')
+    onElementAppear('.game-over-modal-shell-buttons', () => {
+        const targetElement = document.querySelector('.game-over-modal-shell-buttons')
         if (targetElement) targetElement.appendChild(arslanovUI("chess.com"))
     })
 
